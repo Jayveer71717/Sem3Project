@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Student Management</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700&family=Figtree:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header class="top">
+        <h1>Student Management</h1>
+        <p>Add, search and keep track of every student in one place.</p>
+    </header>
+
+    <main class="layout">
+        <section class="stats" aria-label="Summary">
+            <div class="stat"><span id="statTotal">0</span><small>Students</small></div>
+            <div class="stat"><span id="statCourses">0</span><small>Courses</small></div>
+            <div class="stat"><span id="statAvg">0</span><small>Average grade</small></div>
+        </section>
+
+        <section class="panel form-panel">
+            <h2 id="formTitle">Add student</h2>
+            <form id="studentForm" novalidate>
+                <input type="hidden" id="sid">
+                <label>Roll no<input id="roll_no" required></label>
+                <label>Full name<input id="name" required></label>
+                <label>Email<input id="email" type="email" required></label>
+                <label>Course<input id="course" required></label>
+                <div class="row">
+                    <label>Year<input id="year" type="number" min="1" max="6" required></label>
+                    <label>Grade (0–100)<input id="grade" type="number" min="0" max="100" step="0.1" required></label>
+                </div>
+                <p id="formError" class="error" role="alert"></p>
+                <div class="actions">
+                    <button type="submit" class="btn primary" id="saveBtn">Add student</button>
+                    <button type="button" class="btn ghost" id="cancelBtn" hidden>Cancel</button>
+                </div>
+            </form>
+        </section>
+
+        <section class="panel list-panel">
+            <div class="toolbar">
+                <input id="search" type="search" placeholder="Search by name, roll no or email">
+                <select id="courseFilter" aria-label="Filter by course">
+                    <option value="">All courses</option>
+                </select>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Roll no</th>
+                            <th>Name</th>
+                            <th>Course</th>
+                            <th>Year</th>
+                            <th>Grade</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="rows"></tbody>
+                </table>
+            </div>
+            <p id="empty" class="empty" hidden>No students yet. Fill in the form to add the first one.</p>
+        </section>
+    </main>
+
+    <div id="toast" class="toast" role="status"></div>
+    <script src="script.js"></script>
+</body>
+
+</html>
