@@ -1,0 +1,113 @@
+{% extends "layout.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+{% block nav %}
+<a class="nav-link active" href="{{ url_for('student.dashboard') }}">Dashboard</a>
+<a class="nav-link" href="#subjects">Subjects</a>
+<a class="nav-link" href="#attendance">Attendance</a>
+<a class="nav-link" href="#marks">Marks</a>
+{% endblock %}
+{% block content %}
+{% if student %}
+<div class="card">
+  <h2>Welcome, {{ student.full_name }}</h2>
+  <dl class="details">
+    <div>
+      <dt>Roll number</dt>
+      <dd>{{ student.roll_no }}</dd>
+    </div>
+    <div>
+      <dt>Course</dt>
+      <dd>{{ student.course }}</dd>
+    </div>
+    <div>
+      <dt>Semester</dt>
+      <dd>{{ student.semester }}</dd>
+    </div>
+  </dl>
+</div>
+
+<div class="card" id="subjects">
+  <h2>Subjects</h2>
+  {% if subjects %}
+  <div class="table-wrap">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Code</th>
+          <th>Name</th>
+          <th>Credits</th>
+        </tr>
+      </thead>
+      <tbody>{% for s in subjects %}<tr>
+          <td>{{ s.code }}</td>
+          <td>{{ s.name }}</td>
+          <td>{{ s.credits }}</td>
+        </tr>{% endfor %}</tbody>
+    </table>
+  </div>
+  {% else %}<p class="muted">No subjects have been assigned to your course and semester yet.</p>{% endif %}
+</div>
+
+<div class="card" id="attendance">
+  <h2>Attendance</h2>
+  {% if attendance %}
+  <div class="table-wrap">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Subject</th>
+          <th>Attended</th>
+          <th>Total classes</th>
+          <th>Percentage</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for a in attendance %}
+        <tr>
+          <td>{{ a.code }} - {{ a.name }}</td>
+          <td>{{ a.attended }}</td>
+          <td>{{ a.total }}</td>
+          <td>{% if a.percent is none %}-{% else %}{{ a.percent }}%{% if a.percent < 75 %} (low){% endif %}{% endif
+              %}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <p class="muted">Late counts as attended.</p>
+  {% else %}<p class="muted">No attendance recorded yet.</p>{% endif %}
+</div>
+
+<div class="card" id="marks">
+  <h2>Marks</h2>
+  {% if marks %}
+  <div class="table-wrap">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Subject</th>
+          <th>Exam</th>
+          <th>Marks</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for m in marks %}
+        <tr>
+          <td>{{ m.code }} - {{ m.name }}</td>
+          <td>{{ m.exam_type|capitalize }}</td>
+          <td>{{ '%g'|format(m.marks_obtained) }} / {{ '%g'|format(m.max_marks) }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}<p class="muted">No marks published yet.</p>{% endif %}
+</div>
+{% else %}
+<div class="card empty">
+  <h2>Profile not set up</h2>
+  <p class="muted">Your login is active but no student profile is linked to it. Please contact the administrator.</p>
+</div>
+{% endif %}
+{% endblock %}

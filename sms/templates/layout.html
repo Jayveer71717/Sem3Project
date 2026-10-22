@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block body_class %}app-page{% endblock %}
+{% block body %}
+<div class="shell">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-head">
+      <div class="brand-mark">SM</div>
+      <div>
+        <div class="sidebar-title">Student Management TEST</div>
+        <div class="sidebar-sub">{{ 'Administration' if g.user.role == 'admin' else 'Student portal' }}</div>
+      </div>
+    </div>
+
+    <nav class="nav" aria-label="Main">
+      {% block nav %}{% endblock %}
+    </nav>
+
+    <div class="sidebar-foot">
+      <div class="user-chip">
+        <span class="avatar">{{ g.user.username[0]|upper }}</span>
+        <span class="user-meta"><strong>{{ g.user.username }}</strong><small>{{ g.user.role|capitalize }}</small></span>
+      </div>
+      <form method="post" action="{{ url_for('auth.logout') }}">
+        <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+        <button type="submit" class="btn btn-ghost btn-block">Sign out</button>
+      </form>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <button class="menu-btn" type="button" data-toggle-sidebar aria-label="Open menu">Menu</button>
+      <h1>{% block page_title %}{% endblock %}</h1>
+    </header>
+    <div class="content">
+      {% include "_flash.html" %}
+      {% block content %}{% endblock %}
+    </div>
+  </div>
+</div>
+{% endblock %}

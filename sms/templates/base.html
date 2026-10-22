@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{{ config.APP_NAME }}{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+  <div class="shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">{{ config.APP_NAME }}</div>
+
+      <nav class="nav">
+        {% if g.user.role == 'admin' %}
+        <a href="{{ url_for('admin.dashboard') }}"
+          class="{{ 'active' if request.endpoint == 'admin.dashboard' }}">Dashboard</a>
+        <a href="{{ url_for('admin.students') }}"
+          class="{{ 'active' if (request.endpoint or '').startswith('admin.student') }}">Students</a>
+        {# Add new admin links here as modules are built:
+        Attendance, Marks, Assignments, Analytics #}
+        {% else %}
+        <a href="{{ url_for('student.dashboard') }}"
+          class="{{ 'active' if request.endpoint == 'student.dashboard' }}">Dashboard</a>
+        {# Add: My Attendance, My Marks, My Assignments, Profile #}
+        {% endif %}
+      </nav>
+
+      <div class="sidebar-foot">
+        <div class="who">
+          <span class="who-name">{{ g.user.username }}</span>
+          <span class="who-role">{{ g.user.role|capitalize }}</span>
+        </div>
+        <form method="post" action="{{ url_for('auth.logout') }}">
+          <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+          <button type="submit" class="btn btn-ghost btn-block">Sign out</button>
+        </form>
+      </div>
+    </aside>
+
+    <div class="main">
+      <header class="topbar">
+        <button class="menu-btn" id="menuBtn" type="button" aria-label="Toggle menu">Menu</button>
+        <h1 class="page-title">{% block heading %}{% endblock %}</h1>
+      </header>
+      <main class="content">
+        {% include "_flash.html" %}
+        {% block content %}{% endblock %}
+      </main>
+    </div>
+  </div>
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+
+</html>

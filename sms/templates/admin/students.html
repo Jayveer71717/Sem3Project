@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+{% block title %}Students{% endblock %}
+{% block page_title %}Students{% endblock %}
+{% block nav %}{% include "admin/_nav.html" %}{% endblock %}
+{% block content %}
+<div class="card">
+  {% if students %}
+  <div class="table-wrap">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Roll no</th>
+          <th>Name</th>
+          <th>Course</th>
+          <th>Semester</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in students %}
+        <tr>
+          <td>{{ s.roll_no }}</td>
+          <td>{{ s.full_name }}</td>
+          <td>{{ s.course }}</td>
+          <td>{{ s.semester }}</td>
+          <td>{{ 'Active' if s.is_active else 'Disabled' }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}<p class="muted">No students yet.</p>{% endif %}
+</div>
+{% endblock %}

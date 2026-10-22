@@ -1,0 +1,59 @@
+{% extends "layout.html" %}
+{% block title %}Mark attendance{% endblock %}
+{% block page_title %}Mark attendance{% endblock %}
+{% block nav %}{% include "admin/_nav.html" %}{% endblock %}
+{% block content %}
+<div class="card">
+    <form method="get" class="inline-form">
+        <select name="subject_id" required>
+            <option value="">Select subject</option>
+            {% for s in subjects %}
+            <option value="{{ s.id }}" {% if subject and subject.id==s.id %}selected{% endif %}>{{ s.code }} - {{ s.name
+                }} ({{ s.course }} Sem {{ s.semester }})</option>
+            {% endfor %}
+        </select>
+        <input type="date" name="class_date" value="{{ class_date }}" max="{{ today }}" required>
+        <button class="btn" type="submit">Load</button>
+    </form>
+</div>
+{% if subject %}
+<div class="card">
+    <h2>{{ subject.code }} - {{ subject.name }} <small class="muted">{{ class_date }}</small></h2>
+    {% if roster %}
+    <form method="post">
+        <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+        <input type="hidden" name="subject_id" value="{{ subject.id }}">
+        <input type="hidden" name="class_date" value="{{ class_date }}">
+        <div class="table-wrap">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Roll no</th>
+                        <th>Name</th>
+                        <th>Present</th>
+                        <th>Absent</th>
+                        <th>Late</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for s in roster %}
+                    <tr>
+                        <td>{{ s.roll_no }}</td>
+                        <td>{{ s.full_name }}</td>
+                        {% for st in ['present','absent','late'] %}
+                        <td><input type="radio" name="status_{{ s.id }}" value="{{ st }}" aria-label="{{ st }}" {% if
+                                (s.status or 'present' )==st %}checked{% endif %}></td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <button class="btn btn-primary" type="submit">Save attendance</button>
+    </form>
+    {% else %}
+    <p class="muted">No students are enrolled in {{ subject.course }}, semester {{ subject.semester }}.</p>
+    {% endif %}
+</div>
+{% endif %}
+{% endblock %}

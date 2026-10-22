@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+{% block nav %}{% include "admin/_nav.html" %}{% endblock %}
+{% block content %}
+<div class="cards">
+  <div class="card stat">
+    <div class="stat-label">Students enrolled</div>
+    <div class="stat-value">{{ counts.total }}</div>
+  </div>
+  <div class="card stat">
+    <div class="stat-label">Active accounts</div>
+    <div class="stat-value">{{ counts.active|int }}</div>
+  </div>
+</div>
+
+{% if counts.total == 0 %}
+<div class="card empty">
+  <h2>No students yet</h2>
+  <p class="muted">Student accounts will be created from the Student Management page once that module is added.</p>
+</div>
+{% endif %}
+{% endblock %}

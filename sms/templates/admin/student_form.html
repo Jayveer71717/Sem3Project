@@ -1,0 +1,52 @@
+{% extends "layout.html" %}
+{% block title %}{{ 'Edit student' if editing else 'Add student' }}{% endblock %}
+{% block page_title %}{{ 'Edit student' if editing else 'Add student' }}{% endblock %}
+{% block nav %}{% include "admin/_nav.html" %}{% endblock %}
+{% block content %}
+<form method="post" class="card form-card">
+  <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+
+  <h2>Student details</h2>
+  <div class="form-grid">
+    <label class="field"><span>Full name</span>
+      <input name="full_name" value="{{ student.full_name }}" required maxlength="100"></label>
+    <label class="field"><span>Roll number</span>
+      <input name="roll_no" value="{{ student.roll_no }}" required maxlength="30"></label>
+    <label class="field"><span>Class</span>
+      <select name="class_level" required>
+        {% for c in classes %}<option value="{{ c }}" {{ 'selected' if c==(student.class_level|int) else '' }}>Class {{
+          c }}</option>{% endfor %}
+      </select></label>
+    <label class="field"><span>Section</span>
+      <select name="section" required>
+        {% for s in sections %}<option value="{{ s }}" {{ 'selected' if s==student.section else '' }}>{{ s }}</option>{%
+        endfor %}
+      </select></label>
+    <label class="field"><span>Date of birth</span>
+      <input type="date" name="date_of_birth" value="{{ student.date_of_birth or '' }}"></label>
+    <label class="field"><span>Admission date</span>
+      <input type="date" name="admission_date" value="{{ student.admission_date or '' }}"></label>
+    <label class="field"><span>Email</span>
+      <input type="email" name="email" value="{{ student.email or '' }}" maxlength="120"></label>
+    <label class="field"><span>Phone</span>
+      <input name="phone" value="{{ student.phone or '' }}" maxlength="20"></label>
+    <label class="field span-2"><span>Address</span>
+      <input name="address" value="{{ student.address or '' }}" maxlength="255"></label>
+  </div>
+
+  <h2 class="section-gap">Login account</h2>
+  <div class="form-grid">
+    <label class="field"><span>Username</span>
+      <input name="username" value="{{ student.username }}" {{ 'readonly' if editing else 'required' }}
+        maxlength="50"></label>
+    <label class="field"><span>{{ 'New password (leave blank to keep)' if editing else 'Password (min 8 characters)'
+        }}</span>
+      <input type="password" name="password" autocomplete="new-password" {{ '' if editing else 'required' }}></label>
+  </div>
+
+  <div class="form-actions">
+    <button class="btn btn-primary" type="submit">{{ 'Save changes' if editing else 'Add student' }}</button>
+    <a class="btn btn-outline" href="{{ url_for('admin.students') }}">Cancel</a>
+  </div>
+</form>
+{% endblock %}

@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sign in · {{ config.APP_NAME }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body class="auth-body">
+  <div class="auth-wrap">
+    <section class="auth-aside">
+      <div class="brand">{{ config.APP_NAME }}</div>
+      <p class="auth-lead">Attendance, marks and assignments for your college, in one place.</p>
+      <p class="auth-note">Accounts are created by the college administrator. If you cannot sign in, contact the
+        administration office.</p>
+    </section>
+
+    <section class="auth-main">
+      <form method="post" action="{{ url_for('auth.login') }}" class="auth-card" novalidate>
+        <h1>Sign in</h1>
+        <p class="muted">Use the username and password given to you.</p>
+
+        {% include "_flash.html" %}
+
+        <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+
+        <label for="username">Username</label>
+        <input id="username" name="username" type="text" value="{{ username }}" autocomplete="username" autofocus
+          required maxlength="50">
+
+        <label for="password">Password</label>
+        <div class="pw-field">
+          <input id="password" name="password" type="password" autocomplete="current-password" required>
+          <button type="button" class="pw-toggle" id="pwToggle" aria-label="Show password">Show</button>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">Sign in</button>
+      </form>
+    </section>
+  </div>
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+
+</html>

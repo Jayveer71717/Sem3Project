@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ title }} · {{ config.APP_NAME }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body class="auth-body">
+  <div class="error-wrap">
+    <div class="error-card">
+      <div class="error-code">{{ code }}</div>
+      <h1>{{ title }}</h1>
+      <p class="muted">{{ message }}</p>
+      {# Plain link on purpose: this page must render even when the database is down. #}
+      <a class="btn btn-primary" href="/">Back to home</a>
+    </div>
+  </div>
+</body>
+
+</html>

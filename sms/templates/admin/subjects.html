@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+{% block title %}Subjects{% endblock %}
+{% block page_title %}Subjects{% endblock %}
+{% block nav %}{% include "admin/_nav.html" %}{% endblock %}
+{% block content %}
+<div class="card">
+    <h2>Add subject</h2>
+    <form method="post" class="inline-form">
+        <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+        <input name="code" placeholder="Code (e.g. CS101)" maxlength="20" required>
+        <input name="name" placeholder="Subject name" maxlength="100" required>
+        <input name="course" placeholder="Course (e.g. BCA)" maxlength="80" required>
+        <input name="semester" type="number" min="1" max="12" placeholder="Semester" required>
+        <input name="credits" type="number" min="1" max="20" value="3" required>
+        <button class="btn btn-primary" type="submit">Add</button>
+    </form>
+</div>
+<div class="card">
+    {% if subjects %}
+    <div class="table-wrap">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Code</th>
+                    <th>Name</th>
+                    <th>Course</th>
+                    <th>Semester</th>
+                    <th>Credits</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for s in subjects %}
+                <tr>
+                    <td>{{ s.code }}</td>
+                    <td>{{ s.name }}</td>
+                    <td>{{ s.course }}</td>
+                    <td>{{ s.semester }}</td>
+                    <td>{{ s.credits }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}<p class="muted">No subjects yet. Add one above.</p>{% endif %}
+</div>
+{% endblock %}

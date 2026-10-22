@@ -1,0 +1,61 @@
+{% extends "layout.html" %}
+{% block title %}Marks{% endblock %}
+{% block page_title %}Marks{% endblock %}
+{% block nav %}{% include "admin/_nav.html" %}{% endblock %}
+{% block content %}
+<div class="card">
+    <form method="get" class="inline-form">
+        <select name="subject_id" required>
+            <option value="">Select subject</option>
+            {% for s in subjects %}
+            <option value="{{ s.id }}" {% if subject and subject.id==s.id %}selected{% endif %}>{{ s.code }} - {{ s.name
+                }} ({{ s.course }} Sem {{ s.semester }})</option>
+            {% endfor %}
+        </select>
+        <select name="exam_type">
+            {% for e in exams %}<option value="{{ e }}" {% if e==exam_type %}selected{% endif %}>{{ e|capitalize }}
+            </option>{% endfor %}
+        </select>
+        <button class="btn" type="submit">Load</button>
+    </form>
+</div>
+{% if subject %}
+<div class="card">
+    <h2>{{ subject.code }} - {{ subject.name }} <small class="muted">{{ exam_type|capitalize }}</small></h2>
+    {% if roster %}
+    <form method="post">
+        <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+        <input type="hidden" name="subject_id" value="{{ subject.id }}">
+        <input type="hidden" name="exam_type" value="{{ exam_type }}">
+        <p><label>Max marks <input name="max_marks" type="number" step="0.01" min="1" max="999"
+                    value="{{ roster[0].max_marks if roster[0].max_marks is not none else 100 }}" required></label></p>
+        <div class="table-wrap">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Roll no</th>
+                        <th>Name</th>
+                        <th>Marks obtained</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for s in roster %}
+                    <tr>
+                        <td>{{ s.roll_no }}</td>
+                        <td>{{ s.full_name }}</td>
+                        <td><input name="marks_{{ s.id }}" type="number" step="0.01" min="0"
+                                value="{{ s.marks_obtained if s.marks_obtained is not none else '' }}"></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <p class="muted">Leave a box empty to skip that student.</p>
+        <button class="btn btn-primary" type="submit">Save marks</button>
+    </form>
+    {% else %}
+    <p class="muted">No students are enrolled in {{ subject.course }}, semester {{ subject.semester }}.</p>
+    {% endif %}
+</div>
+{% endif %}
+{% endblock %}
